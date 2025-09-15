@@ -1,0 +1,75 @@
+\documentclass[10pt]{article}
+\title{Solutions to Exercises of Chapter 3}
+\author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
+\date{\today}
+
+\usepackage{settings}
+
+\begin{document}
+\maketitle
+
+\glsunset{hc}
+
+\section*{Problem 3.1 (Exactness of $p_{\mathrm{FRT}}$)}
+
+\section*{Problem 3.2 (Monte Carlo error of $\hat{p}_{\mathrm{FRT}}$)}
+
+\section*{Problem 3.3 (A finite-sample valid Monte Carlo approximation of $p_{\mathrm{FRT}}$)}
+
+\section*{Problem 3.4 (Fisher's exact test)}
+
+\section*{Problem 3.5 (More details for lady tasting tea)}
+
+\section*{Problem 3.6 (Covariate-adjusted FRT)}
+
+\section*{Problem 3.8 (An algebraic detail)}
+
+We are asked to show that
+\begin{align*}
+  (n - 1) s^2 
+  = \sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1)}^2 
+    + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0)}^2
+    + \frac{n_1 n_0}{n} \hat{\tau}^2.
+  \tag{3.7}
+\end{align*}
+
+First,
+notice that 
+\begin{align*}
+  \bar{Y} \equiv \frac{1}{n} \sum_{i=1}^n Y_i 
+  = \frac{1}{n} \bp{\sum_{Z_i=1} Y_i + \sum_{Z_i=0} Y_i}
+  = \frac{1}{n} \bp{n_1 \hat{\bar{Y}}(1) + n_0 \hat{\bar{Y}}(0)},
+\end{align*}
+which implies
+\begin{align}
+  \bar{Y} 
+  &= \hat{\bar{Y}}(1) 
+  - \frac{n_0}{n} \underbrace{\bp{\hat{\bar{Y}}(1) - \hat{\bar{Y}}(0)}}_{\hat{\tau}}
+  = \hat{\bar{Y}}(0)
+  + \frac{n_1}{n} \underbrace{\bp{\hat{\bar{Y}}(1) - \hat{\bar{Y}}(0)}}_{\hat{\tau}}. 
+    \label{eq:overall-mean}
+\end{align}
+Therefore, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} (n - 1) s^2 \\
+  &\equiv \sum_{i = 1}^n \bp{Y_i - \bar{Y}}^2 \tag{Definition}\\
+  &= \sum_{Z_i = 1} \bp{Y_i - \bar{Y}}^2 + \sum_{Z_i = 0} \bp{Y_i - \bar{Y}}^2 \tag{Partition by $Z_i$} \\
+  &= \sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1) + \hat{\bar{Y}}(1) - \bar{Y}}^2 
+    + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0) + \hat{\bar{Y}}(0) - \bar{Y}}^2 \tag{Add and subtract} \\
+  &= \sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1) + \frac{n_0}{n} \hat{\tau}}^2
+    + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0) - \frac{n_1}{n} \hat{\tau}}^2
+    \tag{Use \cref{eq:overall-mean}} \\
+  &= \sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1)}^2 + \frac{n_0^2 n_1}{n^2} \hat{\tau}^2 
+    + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0)}^2 + \frac{n_1^2 n_0}{n^2} \hat{\tau}^2
+    \tag{$\sum\limits_{Z_i = z}(Y_i - \hat{\bar{Y}}(z)) = 0$} \\
+  &= \sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1)}^2 
+    + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0)}^2
+    + \frac{n_1 n_0}{n} \hat{\tau}^2,
+    \tag{Combine terms}
+\end{align*}
+which completes the proof.
+
+
+
+\printglossaries
+\end{document}

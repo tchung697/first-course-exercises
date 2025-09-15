@@ -1,0 +1,383 @@
+\documentclass[10pt]{article}
+\title{Solutions to Exercises of Chapter 4}
+\author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
+\date{\today}
+
+\usepackage{settings}
+
+\begin{document}
+\maketitle
+
+\glsunset{hc}
+
+\section*{Problem 4.1 (Proof of Lemma 4.1)}
+
+Let $\bar{Y}(z) = \frac{1}{n} \sum_{i=1}^n Y_i(z)$ be the finite population mean
+under treatment $z$.
+Let $\tau_i = Y_i(1) - Y_i(0)$ be the individual treatment effect
+and $\bar{\tau} = \frac{1}{n} \sum_{i=1}^n \tau_i$ be 
+the finite population average treatment effect.
+
+We are asked to show that
+\begin{align*}
+  2S(1, 0) = S^2(1) + S^2(0) - S^2(\tau),
+\end{align*}
+where
+\begin{align*}
+  S^2(z) &= \frac{1}{n - 1} \sum_{i=1}^n \bp{Y_i(z) - \bar{Y}(z)}^2, \quad z \in \bc{0, 1}, \\
+  S^2(\tau) &= \frac{1}{n - 1} \sum_{i=1}^n (\tau_i - \bar{\tau})^2, \\
+  S(1, 0) &= \frac{1}{n - 1} \sum_{i=1}^n \bp{Y_i(1) - \bar{Y}(1)} \bp{Y_i(0) - \bar{Y}(0)}.
+\end{align*}
+
+To see this, we first note that
+\begin{align*}
+  \tau_i - \bar{\tau}
+  = \bp{Y_i(1) - \bar{Y}(1)} - \bp{Y_i(0) - \bar{Y}(0)}.
+\end{align*}
+Thus, we have
+\begin{align*}
+  &\mathrel{\phantom{=}}S^2(\tau) \\
+  &= \frac{1}{n - 1} \sum_{i=1}^n (\tau_i - \bar{\tau})^2 \\
+  &= \frac{1}{n - 1} \sum_{i=1}^n \bp{\bp{Y_i(1) - \bar{Y}(1)} - \bp{Y_i(0) - \bar{Y}(0)}}^2 \\
+  &= \frac{1}{n - 1} \sum_{i=1}^n \bs{
+    \bp{Y_i(1) - \bar{Y}(1)}^2
+    + \bp{Y_i(0) - \bar{Y}(0)}^2
+    - 2\bp{Y_i(1) - \bar{Y}(1)}\bp{Y_i(0) - \bar{Y}(0)}
+  } \\
+  &= S^2(1) + S^2(0) - 2S(1, 0),
+\end{align*}
+which completes the proof.
+
+\section*{Alternative proof of Theorem 4.1}
+
+\section*{Problem 4.3 (Neymanian inference and \glsentryshort{ols})}
+
+Consider the \gls{ols} estimator defined as
+\begin{align*}
+  \bp{\hat{\alpha}, \hat{\beta}}
+  = \argmin_{a, b} \sum_{i=1}^n \bp{Y_i - a - b Z_i}^2.
+\end{align*}
+We are asked to show that 
+\begin{align*}
+  \hat{\beta} = \hat{\tau}. \tag{4.3}
+  \label{eq:4.3}
+\end{align*}
+To see this, we first note that
+\begin{align*}
+  \sum_{i=1}^n \bp{Y_i - a - b Z_i}^2
+  &= \sum_{Z_i = 1} \bp{Y_i - a - b}^2 + \sum_{Z_i = 0} \bp{Y_i - a}^2.
+\end{align*}
+Taking the derivatives with respect to $a$ and $b$,
+we have
+\begin{align*}
+  \frac{\partial}{\partial a} \sum_{i=1}^n \bp{Y_i - a - b Z_i}^2
+  &= -2 \sum_{Z_i = 1} (Y_i - a - b) - 2 \sum_{Z_i = 0} (Y_i - a), \\
+  \frac{\partial}{\partial b} \sum_{i=1}^n \bp{Y_i - a - b Z_i}^2
+  &= -2 \sum_{Z_i = 1} \bp{Y_i - a - b}.
+\end{align*}
+Setting these derivatives to zero
+and solving the resulting equations,
+we have
+\begin{align*}
+  \hat{\alpha} 
+  &= \frac{1}{n_0} \sum_{Z_i = 0} Y_i 
+  = \hat{\bar{Y}}(0), \\
+  \hat{\beta} 
+  &= \frac{1}{n_1} \sum_{Z_i = 1} Y_i - \hat{\alpha}
+  = \hat{\bar{Y}}(1) - \hat{\bar{Y}}(0) 
+  = \hat{\tau},
+\end{align*}
+which shows \cref{eq:4.3}.
+
+Next, we are asked to show that
+the usual variance estimator from the \gls{ols} equals 
+\begin{align*}
+  \hat{V}_{\text{OLS}} 
+  &\equiv \bs{\hat{\sigma}^2 \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}}_{\bp{2, 2}} \\
+  &= \frac{n\bp{n_1 - 1}}{(n - 2)(n_1 - n_0)} \hat{S}^2(1)
+  + \frac{n\bp{n_0 - 1}}{(n - 2)(n_0 - n_1)} \hat{S}^2(0) \tag{4.4} \label{eq:4.4} \\
+  &\approx \frac{\hat{S}^2(1)}{n_0} + \frac{\hat{S}^2(0)}{n_1},
+\end{align*}
+where $X_i = (1, Z_i)^\intercal$,
+$\hat{\sigma}^2 = \bp{n - 2}^{-1} \sum_{i=1}^n \bp{Y_i - \hat{\alpha} - \hat{\beta} Z_i}^2$,
+$[\cdot]_{\bp{2, 2}}$ denotes the second diagonal element of a matrix,
+and
+\begin{align*}
+  \hat{S}^2(z) = \frac{1}{n_z - 1} \sum_{Z_i = z} \bp{Y_i - \hat{\bar{Y}}(z)}^2, \quad z \in \bc{0, 1}.
+\end{align*}
+We first compute $\hat{\sigma}^2$:
+\begin{align*}
+  \hat{\sigma}^2 
+  &\equiv \frac{1}{n - 2} \sum_{i=1}^n \bp{Y_i - \hat{\alpha} - \hat{\beta} Z_i}^2 \tag{Definition} \\
+  &= \frac{1}{n - 2} \bs{\sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1)}^2 + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0)}^2} \tag{Use \cref{eq:4.3}} \\
+  &= \frac{n_1 - 1}{n - 2} \hat{S}^2(1) + \frac{n_0 - 1}{n - 2} \hat{S}^2(0). \tag{Definition}
+\end{align*}
+Next, we compute $\bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}$:
+\begin{align*}
+  \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}
+  &= \bp{
+    \sum_{i=1}^n 
+    \begin{pmatrix}
+    1 & Z_i \\
+    Z_i & Z_i^2
+    \end{pmatrix}
+    }^{-1} \tag{Definition of $X_i$} \\
+  &= \begin{pmatrix}
+    n & n_1 \\
+    n_1 & n_1
+    \end{pmatrix}^{-1} \tag{$Z_i$ is binary} \\
+  &= \begin{pmatrix}
+    \frac{1}{n_0} & -\frac{1}{n_0} \\
+    -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+  \end{pmatrix}. \tag{Matrix inversion}
+\end{align*}
+Combining these results, we arrive at \cref{eq:4.4}:
+\begin{align*}
+  \hat{V}_{\text{OLS}} 
+  &\equiv \bs{\hat{\sigma}^2 \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}}_{\bp{2, 2}} \tag{Definition} \\
+  &= \hat{\sigma}^2 \cdot \frac{n}{n_1 n_0} \tag{Extract the $(2, 2)$ element} \\
+  &= \frac{n\bp{n_1 - 1}}{(n - 2)(n_1 - n_0)} \hat{S}^2(1)
+  + \frac{n\bp{n_0 - 1}}{(n - 2)(n_0 - n_1)} \hat{S}^2(0). \tag{Use the expression of $\hat{\sigma}^2$}
+\end{align*}
+
+Then, we need to show that
+the \gls{ehw} variance estimator equals
+\begin{align*}
+  \hat{V}_{\text{EHW}} 
+  &\equiv \bs{\bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1} \bp{\sum_{i=1}^n \hat{\varepsilon}_i^2 X_i X_i^\intercal} \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}}_{\bp{2, 2}} \\
+  &= \frac{\hat{S}^2(1)}{n_1} \frac{n_1 - 1}{n_1} + \frac{\hat{S}^2(0)}{n_0} \frac{n_0 - 1}{n_0} \tag{4.5} \label{eq:4.5} \\
+  &\approx \frac{S^2(1)}{n_1} + \frac{S^2(0)}{n_0},
+\end{align*}
+where $\hat{\varepsilon}_i = Y_i - \hat{\alpha} - \hat{\beta} Z_i$.
+
+We first compute $\sum_{i=1}^n \hat{\varepsilon}_i^2 X_i X_i^\intercal$:
+\begin{align*}
+  &\mathrel{\phantom{=}} \sum_{i=1}^n \hat{\varepsilon}_i^2 X_i X_i^\intercal \\
+  &= \sum_{i=1}^n \bp{Y_i - \hat{\alpha} - \hat{\beta} Z_i}^2 
+    \begin{pmatrix}
+      1 & Z_i \\
+      Z_i & Z_i^2
+    \end{pmatrix} \tag{Definition of $X_i$ and $\hat{\varepsilon}_i$} \\
+  &= \sum_{Z_i = 1} \bp{Y_i - \hat{\bar{Y}}(1)}^2 
+    \begin{pmatrix}
+      1 & 1 \\
+      1 & 1
+    \end{pmatrix}
+    + \sum_{Z_i = 0} \bp{Y_i - \hat{\bar{Y}}(0)}^2 
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & 0
+    \end{pmatrix} \tag{Use \cref{eq:4.3}} \\
+  &= (n_1 - 1) \hat{S}^2(1)
+    \begin{pmatrix}
+      1 & 1 \\
+      1 & 1
+    \end{pmatrix}
+    + (n_0 - 1) \hat{S}^2(0)
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & 0
+    \end{pmatrix} \tag{Definition of $\hat{S}^2(z)$} \\
+  &= \begin{pmatrix}
+      (n_1 - 1) \hat{S}^2(1) + (n_0 - 1) \hat{S}^2(0) & (n_1 - 1) \hat{S}^2(1) \\
+      (n_1 - 1) \hat{S}^2(1) & (n_1 - 1) \hat{S}^2(1)
+    \end{pmatrix}. \tag{Matrix addition}
+\end{align*}
+Then, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \hat{V}_{\text{EHW}} \\
+  &\equiv \bs{\bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1} \bp{\sum_{i=1}^n \hat{\varepsilon}_i^2 X_i X_i^\intercal} \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}}_{\bp{2, 2}}\\
+  &= \bs{
+    \begin{pmatrix}
+      \frac{1}{n_0} & -\frac{1}{n_0} \\
+      -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+    \end{pmatrix}
+    \begin{pmatrix}
+      (n_1 - 1) \hat{S}^2(1) + (n_0 - 1) \hat{S}^2(0) & (n_1 - 1) \hat{S}^2(1) \\
+      (n_1 - 1) \hat{S}^2(1) & (n_1 - 1) \hat{S}^2(1)
+    \end{pmatrix}
+    \begin{pmatrix}
+      \frac{1}{n_0} & -\frac{1}{n_0} \\
+      -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+    \end{pmatrix}
+  }_{\bp{2, 2}} \\
+  &= \bp{-\frac{1}{n_0}} \bs{(n_0 - 1) \hat{S}^2(0) + (n_1 - 1) \hat{S}^2(1)} \bp{-\frac{1}{n_0}}
+  + \bp{\frac{n}{n_1 n_0}} (n_1 - 1) \hat{S}^2(1) \bp{-\frac{1}{n_0}} \\
+  &\quad + \bp{-\frac{1}{n_0}} (n_1 - 1) \hat{S}^2(1) \bp{\frac{n}{n_1 n_0}}
+  + \bp{\frac{n}{n_1 n_0}} (n_1 - 1) \hat{S}^2(1) \bp{\frac{n}{n_1 n_0}} \\
+  &= \frac{(n_0 - 1)\hat{S}^2(0)}{n_0^2} + \frac{(n_1 - 1)\hat{S}^2(1)}{n_0^2}
+    - \frac{2n(n_1 - 1) \hat{S}^2(1)}{n_1 n_0^2} 
+    + \frac{n^2 (n_1 - 1) \hat{S}^2(1)}{n_1^2 n_0^2} \\ 
+  &= \frac{(n_0 - 1)\hat{S}^2(0)}{n_0^2} + \frac{\bp{n_1^2 - 2nn_1 + n^2} (n_1 - 1)\hat{S}^2(1)}{n_1^2 n_0^2} \\
+  &= \frac{(n_0 - 1)\hat{S}^2(0)}{n_0^2} + \frac{(n_1 - 1) \hat{S}^2(1)}{n_1^2},
+\end{align*}
+which shows \cref{eq:4.5}.
+
+Finally, we are asked to show that
+the \gls{hc}2 variance estimator exactly recovers $\hat{V}$,
+where the \gls{hc}2 variance estimator is defined as
+\begin{align*}
+  \hat{V}_{\text{HC2}} 
+  &\equiv \bs{\bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1} \bp{\sum_{i=1}^n \frac{\hat{\varepsilon}_i^2}{(1 - h_{ii})} X_i X_i^\intercal} \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}}_{\bp{2, 2}},
+\end{align*}
+with $h_{ii} = X_i^\intercal \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1} X_i$,
+and 
+\begin{align*}
+  \hat{V} = \frac{\hat{S}^2(1)}{n_1} + \frac{\hat{S}^2(0)}{n_0}.
+\end{align*}
+
+Notice that for $Z_i = 0$,
+\begin{align*}
+  h_{ii} 
+  = \begin{pmatrix}
+    1 & 0
+  \end{pmatrix}
+  \begin{pmatrix}
+    \frac{1}{n_0} & -\frac{1}{n_0} \\
+    -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+  \end{pmatrix}
+  \begin{pmatrix}
+    1 \\ 0
+  \end{pmatrix}
+  = \frac{1}{n_0},
+\end{align*}
+and for $Z_i = 1$,
+\begin{align*}
+  h_{ii} 
+  = \begin{pmatrix}
+    1 & 1
+  \end{pmatrix}
+  \begin{pmatrix}
+    \frac{1}{n_0} & -\frac{1}{n_0} \\
+    -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+  \end{pmatrix}
+  \begin{pmatrix}
+    1 \\ 1
+  \end{pmatrix}
+  = \frac{1}{n_0} - \frac{1}{n_0} + \frac{n}{n_1 n_0}
+  = \frac{1}{n_1}.
+\end{align*}
+We can compute $\sum_{i=1}^n (1 - h_{ii})^{-1}\hat{\varepsilon}_i^2 X_i X_i^\intercal$:
+\begin{align*}
+  &\mathrel{\phantom{=}} \sum_{i=1}^n \frac{\hat{\varepsilon}_i^2}{1 - h_{ii}} X_i X_i^\intercal \\
+  &= \sum_{Z_i = 0} \frac{\hat{\varepsilon}_i^2}{1 - \frac{1}{n_0}} 
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & 0
+    \end{pmatrix}
+    + \sum_{Z_i = 1} \frac{\hat{\varepsilon}_i^2}{1 - \frac{1}{n_1}} 
+    \begin{pmatrix}
+      1 & 1 \\
+      1 & 1
+    \end{pmatrix} \tag{Use the expression of $h_{ii}$} \\
+  &= \frac{n_0}{n_0 - 1} \sum_{Z_i = 0} \hat{\varepsilon}_i^2
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & 0
+    \end{pmatrix}
+    + \frac{n_1}{n_1 - 1} \sum_{Z_i = 1} \hat{\varepsilon}_i^2
+    \begin{pmatrix}
+      1 & 1 \\
+      1 & 1
+    \end{pmatrix} \tag{Factor out constants} \\
+  &= n_0 \hat{S}^2(0)
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & 0
+    \end{pmatrix}
+    + n_1 \hat{S}^2(1)
+    \begin{pmatrix}
+      1 & 1 \\
+      1 & 1
+    \end{pmatrix} \tag{Definition of $\hat{S}^2(z)$} \\
+  &= \begin{pmatrix}
+      n_0 \hat{S}^2(0) + n_1 \hat{S}^2(1) & n_1 \hat{S}^2(1) \\
+      n_1 \hat{S}^2(1) & n_1 \hat{S}^2(1)
+    \end{pmatrix}. \tag{Matrix addition}
+\end{align*}
+Applying similar calculations as those for $\hat{V}_{\text{EHW}}$,
+we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \hat{V}_{\text{HC2}} \\
+  &\equiv \bs{\bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1} \bp{\sum_{i=1}^n \frac{\hat{\varepsilon}_i^2}{(1 - h_{ii})} X_i X_i^\intercal} \bp{\sum_{i=1}^n X_i X_i^\intercal}^{-1}}_{\bp{2, 2}}\\
+  &= \bs{
+    \begin{pmatrix}
+      \frac{1}{n_0} & -\frac{1}{n_0} \\
+      -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+    \end{pmatrix}
+    \begin{pmatrix}
+      n_0 \hat{S}^2(0) + n_1 \hat{S}^2(1) & n_1 \hat{S}^2(1) \\
+      n_1 \hat{S}^2(1) & n_1 \hat{S}^2(1)
+    \end{pmatrix}
+    \begin{pmatrix}
+      \frac{1}{n_0} & -\frac{1}{n_0} \\
+      -\frac{1}{n_0} & \frac{n}{n_1 n_0}
+    \end{pmatrix}
+  }_{\bp{2, 2}} \\
+  &= \frac{\hat{S}^2(0)}{n_0} + \frac{\hat{S}^2(1)}{n_1},
+\end{align*}
+which exactly takes the formTreatment effect heterogeneity of $\hat{V}$.
+
+\section*{Problem 4.4 (Treatment effect heterogeneity)}
+
+\section*{Problem 4.5 (A better bound of the variance formula)}
+
+We are asked to show that
+\begin{align}
+  \Var\bp{\hat{\tau}}
+  \leq \frac{1}{n}\bc{\sqrt{\frac{n_0}{n_1}} S(1) + \sqrt{\frac{n_1}{n_0}} S(0)}^2. 
+  \tag{4.6} \label{eq:4.6}
+\end{align}
+
+We derive two intermediate results.
+
+First, since we can express $\hat{\tau}$ as
+\begin{align*}
+  \hat{\tau} 
+  &\equiv \frac{1}{n_1} \sum_{Z_i = 1} Y_i - \frac{1}{n_0} \sum_{Z_i = 0} Y_i \tag{Definition} \\
+  &= \frac{1}{n_1} \sum_{i=1}^n Z_i Y_i(1) - \frac{1}{n_0} \sum_{i=1}^n (1 - Z_i) Y_i(0) \tag{Consistency} \\
+  &= \sum_{i=1}^n Z_i \bc{\frac{Y_i(1)}{n_1} + \frac{Y_i(0)}{n_0}} - \frac{1}{n_0} \sum_{i=1}^n Y_i(0). \tag{Rearrange terms}
+\end{align*}
+Therefore, the variance of $\hat{\tau}$ is given by 
+\begin{align*}
+  &\mathrel{\phantom{=}} \Var\bp{\hat{\tau}} \\
+  &= \Var\bc{\sum_{i=1}^n Z_i \bp{\frac{Y_i(1)}{n_1} + \frac{Y_i(0)}{n_0}}} \tag{Constant doesn't matter} \\
+  &= n_1^2 \Var\bc{\frac{1}{n_1} \sum_{i=1}^n Z_i \bp{\frac{Y_i(1)}{n_1} + \frac{Y_i(0)}{n_0}}} \tag{Factor out $n_1^2$} \\ 
+  &= \frac{n_1 n_0}{n(n - 1)} \sum_{i=1}^n \bp{\frac{Y_i(1)}{n_1} + \frac{Y_i(0)}{n_0} - \frac{1}{n} \sum_{j=1}^n \bp{\frac{Y_j(1)}{n_1} + \frac{Y_j(0)}{n_0}}}^2 \tag{Lemma C.2} \\
+  &= \frac{n_1 n_0}{n(n - 1)} \sum_{i=1}^n \bp{\frac{Y_i(1) - \bar{Y}(1)}{n_1} + \frac{Y_i(0) - \bar{Y}(0)}{n_0}}^2 \tag{Definition of $\bar{Y}(z)$} \\
+  &= \frac{n_1 n_0}{n (n - 1)} \left[\frac{1}{n_1^2} \sum_{i=1}^n \bp{Y_i(1) - \bar{Y}(1)}^2 
+    + \frac{1}{n_0^2} \sum_{i=1}^n \bp{Y_i(0) - \bar{Y}(0)}^2 \right. \\ 
+  &\qquad \left. + \frac{2}{n_1 n_0} \sum_{i=1}^n \bp{Y_i(1) - \bar{Y}(1)} \bp{Y_i(0) - \bar{Y}(0)}
+    \right] \tag{Expand the square} \\
+  &= \frac{n_0}{n n_1} S^2(1) + \frac{n_1}{n n_0} S^2(0) + \frac{2}{n} S(1, 0). \tag{Definition of $S^2(z)$ and $S(1, 0)$}
+\end{align*}
+  
+Second, applying the Cauchy inequality, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \abs{S(1, 0)} \\
+  &\equiv \abs{\frac{1}{n - 1} \sum_{i=1}^n \bp{Y_i(1) - \bar{Y}(1)} \bp{Y_i(0) - \bar{Y}(0)}} \tag{Definition} \\
+  &\leq \sqrt{\frac{1}{n - 1} \sum_{i=1}^n \bp{Y_i(1) - \bar{Y}(1)}^2} 
+    \sqrt{\frac{1}{n - 1} \sum_{i=1}^n \bp{Y_i(0) - \bar{Y}(0)}^2} \tag{Cauchy inequality} \\
+  &= S(1) S(0), \tag{Definition}
+\end{align*}
+which further implies that
+\begin{align*}
+  -S(1) S(0) \leq S(1, 0) \leq S(1) S(0).
+\end{align*}
+
+Applying these two results,
+we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \Var\bp{\hat{\tau}} \\
+  &= \frac{n_0}{n n_1} S^2(1) + \frac{n_1}{n n_0} S^2(0) + \frac{2}{n} S(1, 0) \tag{Use the above result} \\
+  &\leq \frac{n_0}{n n_1} S^2(1) + \frac{n_1}{n n_0} S^2(0) + \frac{2}{n} S(1) S(0) \tag{Use the above result} \\
+  &= \frac{1}{n} \bc{\sqrt{\frac{n_0}{n_1}} S(1) + \sqrt{\frac{n_1}{n_0}} S(0)}^2, \tag{Complete the square}
+\end{align*}
+which shows \cref{eq:4.6}.
+
+\section*{Problem 4.6 (Vector version of Neyman (1923))}
+
+\section*{Problem 4.7 (Inference in the BRE)}
+
+\printglossaries
+\end{document}
