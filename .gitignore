@@ -11,6 +11,7 @@
 *.cb
 *.cb2
 .*.lb
+*.ist
 
 ## Intermediate documents:
 *.dvi
@@ -35,10 +36,10 @@
 .fdb_latexmk/
 
 # glossaries
-*.acn
+*.acn*
 *.acr
 *.glg
-*.glo
+*.glo*
 *.gls
 *.glsdefs
 *.lzo
