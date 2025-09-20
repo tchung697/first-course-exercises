@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\title{Solutions to Exercises of Chapter 5}
+\author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
+\date{\today}
+
+\usepackage{settings}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 5.1 (Covariate balance in the CRE)}
+
+Consider a \gls{cre} with $n$ units, 
+among which $n_1$ are assigned to treatment ($Z_i = 1$)
+and $n_0$ to control ($Z_i = 0$).
+Let $X_i \in \bc{1, \ldots, K}$ be the stratum membership of unit $i$,
+where $K$ is the number of strata.
+Let $n_{[k]} \equiv \sum_{i=1}^n \mathbf{1}\bp{X_i = k}$ be the number of units in stratum $k$,
+$\pi_{[k]} \equiv n_{[k]}/n$ be the proportion of units in stratum $k$,
+and $n_{[k]z} \equiv \sum_{i=1}^n \mathbf{1}\bp{X_i = k, Z_i = z}$ 
+be the number of units in stratum $k$ assigned to treatment $z$.
+
+We are asked to show that
+\begin{align}
+  \E\bp{\frac{n_{[k]1}}{n_1} - \frac{n_{[k]0}}{n_0}} = 0. \tag{5.2}
+\end{align}
+
+This can directly be shown by the following calculation:
+\begin{align*}
+  &\mathrel{\phantom{=}} \E\bp{\frac{n_{[k]1}}{n_1} - \frac{n_{[k]0}}{n_0}} \\
+  &= \E\bp{\frac{n_{[k]1}}{n_1}} - \E\bp{\frac{n_{[k]0}}{n_0}} \tag{Linearity of $\E\bp{\cdot}$} \\
+  &= \frac{1}{n_1} \E\bp{\sum_{i = 1}^n Z_i \mathbf{1}\bp{X_i = k}} 
+  - \frac{1}{n_0} \E\bp{\sum_{i = 1}^n \bp{1 - Z_i}\mathbf{1}\bp{X_i = k}} 
+    \tag{Definition of $n_{[k]z}$} \\
+  &= \frac{1}{n_1} \sum_{i = 1}^n \mathbf{1}\bp{X_i = k} \E\bp{Z_i}
+  - \frac{1}{n_0} \sum_{i = 1}^n \mathbf{1}\bp{X_i = k} \E\bp{1 - Z_i} 
+    \tag{Linearity of $\E\bp{\cdot}$} \\
+  &= \frac{1}{n_1} \sum_{i = 1}^n \mathbf{1}\bp{X_i = k} \frac{n_1}{n}
+  - \frac{1}{n_0} \sum_{i = 1}^n \mathbf{1}\bp{X_i = k} \frac{n_0}{n} 
+    \tag{$\E\bp{Z_i} = n_1/n$ in the \gls{cre}} \\
+  &= \frac{1}{n} \sum_{i = 1}^n \mathbf{1}\bp{X_i = k}
+  - \frac{1}{n} \sum_{i = 1}^n \mathbf{1}\bp{X_i = k} 
+    \tag{Simplification} \\
+  &= 0.
+\end{align*}
+
+\section*{Problem 5.2 (Consequence of the constant propensity score)}
+
+Following the notation in Problem 5.1,
+let $e_{[k]} \equiv n_{[k]1}/n_{[k]}$ be the propensity score of stratum $k$.
+Define 
+\begin{align*}
+  \hat{\tau} &\equiv \frac{1}{n_1} \sum_{i=1}^n Z_i Y_i - \frac{1}{n_0} \sum_{i=1}^n (1 - Z_i) Y_i, \\
+  \hat{\tau}_{\text{S}} &\equiv \sum_{k=1}^K \pi_{[k]} \hat{\tau}_{[k]},
+\end{align*}
+where 
+\begin{align*}
+  \hat{\tau}_{[k]} 
+  \equiv \frac{1}{n_{[k]1}} \sum_{i:X_i = k} Z_i Y_i 
+  - \frac{1}{n_{[k]0}} \sum_{i:X_i = k} (1 - Z_i) Y_i.
+\end{align*}
+
+We are asked to show that when the propensity score is constant across strata,
+\begin{align}
+  \hat{\tau} = \hat{\tau}_{\text{S}}. \tag{5.3}
+\end{align}
+
+Notice that if the propensity score is constant across strata,
+then $e_{[k]} = n_{[k]1}/n_{[k]} = n_1/n$ for all $k = 1, \ldots, K$.
+Therefore, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \hat{\tau}_{\text{S}} \\
+  &\equiv \sum_{k=1}^K \pi_{[k]} \hat{\tau}_{[k]} \tag{Definition of $\hat{\tau}_{\text{S}}$} \\
+  &= \sum_{k=1}^K \frac{n_{[k]}}{n} \bp{\frac{1}{n_{[k]1}} \sum_{i:X_i = k} Z_i Y_i - \frac{1}{n_{[k]0}} \sum_{i:X_i = k} (1 - Z_i) Y_i} 
+    \tag{Definition of $\pi_{[k]}$ and $\hat{\tau}_{[k]}$} \\
+  &= \frac{1}{n} \sum_{k=1}^K \bp{\frac{n_{[k]}}{n_{[k]1}} \sum_{i:X_i = k} Z_i Y_i - \frac{n_{[k]}}{n_{[k]0}} \sum_{i:X_i = k} (1 - Z_i) Y_i} \tag{Factor out $1/n$} \\
+  &= \frac{1}{n} \sum_{k=1}^K \bp{ \frac{n}{n_1} \sum_{i:X_i = k} Z_i Y_i - \frac{n}{n_0} \sum_{i:X_i = k} (1 - Z_i) Y_i} 
+    \tag{Use $e_{[k]} = n_1/n$} \\
+  &= \frac{1}{n_1} \sum_{k=1}^K \sum_{i:X_i = k} Z_i Y_i - \frac{1}{n_0} \sum_{k=1}^K \sum_{i:X_i = k} (1 - Z_i) Y_i \tag{Factor out $n/n_z$} \\
+  &= \frac{1}{n_1} \sum_{i=1}^n Z_i Y_i - \frac{1}{n_0} \sum_{i=1}^n (1 - Z_i) Y_i \tag{Combine sums} \\
+  &\equiv \hat{\tau}, \tag{Definition of $\hat{\tau}$}
+\end{align*}
+which completes the proof.
+
+\section*{Problem 5.3 (Consquence of constant individual causal effects)}
+
+\section*{Problem 5.4 (Compare the CRE and SRE)}
+
+\section*{Problem 5.5 (From the CRE to the SRE)}
+
+\section*{Problem 5.6 (More FRTs for Section 5.2.2)}
+
+\printglossaries
+\end{document}
