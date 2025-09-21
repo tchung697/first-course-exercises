@@ -12,7 +12,113 @@
 
 \section*{Problem 3.1 (Exactness of $p_{\mathrm{FRT}}$)}
 
+We are asked to show that the $p$-value 
+\begin{align*}
+  p_{\mathrm{FRT}} 
+  = \frac{1}{M} \sum_{m=1}^M 
+  \mathbf{1}\bp{T\bp{\mathbf{z}^{m}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}
+\end{align*}
+is finite-sample exact under the sharp null hypothesis; i.e., for any $u \in [0, 1]$,
+\begin{align*}
+  P\bp{p_{\mathrm{FRT}} \leq u} \leq u.
+\end{align*}
+
+In a \gls{cre},
+$\mathbf{Z}$ is uniformly distributed over 
+the set $\bc{\mathbf{z}^1, \ldots, \mathbf{z}^M}$,
+where $M = \binom{n}{n_1}$ is the total number of possible treatment assignments.
+That is,
+\begin{align*}
+  P(\mathbf{Z} = \mathbf{z}^m) = \frac{1}{M}, \quad m = 1, \ldots, M.
+\end{align*}
+Under the sharp null hypothesis,
+$Y_i(1) = Y_i(0)$ for all $i = 1, \ldots, n$,
+so the observed outcome $\mathbf{Y}$ is invariant to the treatment assignment $\mathbf{Z}$.
+Therefore, the test statistic $T(\mathbf{Z}, \mathbf{Y})$ is also uniformly distributed over
+the set $\bc{T(\mathbf{z}^1, \mathbf{Y}), \ldots, T(\mathbf{z}^M, \mathbf{Y})}$,
+and the $p$-value $p_{\mathrm{FRT}}$ is uniformly distributed over
+the set $\bc{1/M, 2/M, \ldots, 1}$.
+This implies that for any $k \in \{1, \ldots, M\}$,
+\begin{align*}
+  P\bp{p_{\mathrm{FRT}} \leq \frac{k}{M}}
+  = \frac{k}{M}.
+\end{align*}
+For any $u \in [0, 1]$,
+let $k = \lfloor Mu \rfloor$ be the largest integer less than or equal to $Mu$.
+Then,
+\begin{align*}
+  P\bp{p_{\mathrm{FRT}} \leq u}
+  = P\bp{p_{\mathrm{FRT}} \leq \frac{k}{M}}
+  = \frac{k}{M} \leq u,
+\end{align*}
+which completes the proof.
+
 \section*{Problem 3.2 (Monte Carlo error of $\hat{p}_{\mathrm{FRT}}$)}
+
+In practice,
+we usually approximate $p_{\mathrm{FRT}}$ by
+\begin{align*}
+  \hat{p}_{\mathrm{FRT}} 
+  = \frac{1}{R} \sum_{r=1}^R
+  \mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}},
+\end{align*}
+where $\mathbf{z}^1, \ldots, \mathbf{z}^R$ are $R$ independent draws 
+from the uniform distribution over
+the set $\bc{\mathbf{z}^1, \ldots, \mathbf{z}^M}$.
+
+We are asked to show that
+given the observed data $(\mathbf{Z}, \mathbf{Y})$,
+\begin{align*}
+  \E_{\text{mc}}\bp{\hat{p}_{\mathrm{FRT}}} &= p_{\mathrm{FRT}},
+  \intertext{and}
+  \Var_{\text{mc}}\bp{\hat{p}_{\mathrm{FRT}}} \leq \frac{1}{4R},
+\end{align*}
+where $\E_{\text{mc}}$ and $\Var_{\text{mc}}$ denote the expectation and variance
+with respect to the Monte Carlo draws $\mathbf{z}^1, \ldots, \mathbf{z}^R$,
+given the observed data $(\mathbf{Z}, \mathbf{Y})$.
+
+For any $r \in \{1, \ldots, R\}$,
+$\mathbf{z}^r$ is drawn from the uniform distribution over the set
+$\bc{\mathbf{z}^1, \ldots, \mathbf{z}^M}$, 
+so we have
+\begin{align*}
+  \E_{\text{mc}}\bp{\mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}}
+  &= P_{\text{mc}}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}} \\
+  &= \frac{1}{M} \sum_{m=1}^M
+  \mathbf{1}\bp{T\bp{\mathbf{z}^{m}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}} \\
+  &= p_{\mathrm{FRT}}.
+\end{align*}
+Applying the linearity of expectation, we have
+\begin{align*}
+  &\mathrel{\phantom{=}}\E_{\text{mc}}\bp{\hat{p}_{\mathrm{FRT}}}\\
+  &= \E_{\text{mc}}\bp{\frac{1}{R} \sum_{r=1}^R
+  \mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}} \\
+  &= \frac{1}{R} \sum_{r=1}^R 
+  \E_{\text{mc}}\bp{\mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}} \\
+  &= p_{\mathrm{FRT}},
+\end{align*}
+which proves the first part.
+
+For the second part,
+notice that for any $r$,
+\begin{align*}
+  &\mathrel{\phantom{=}}\Var_{\text{mc}}\bp{\mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}} \\
+  &= \E_{\text{mc}}\bp{\mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}^2}
+    - \bp{\E_{\text{mc}}\bp{\mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}}}^2 \\
+  &= p_{\mathrm{FRT}} - p_{\mathrm{FRT}}^2 \\
+  &\leq \frac{1}{4}.
+\end{align*}
+Since $\mathbf{z}^1, \ldots, \mathbf{z}^R$ are independent,
+\begin{align*}
+  &\mathrel{\phantom{=}}\Var_{\text{mc}}\bp{\hat{p}_{\mathrm{FRT}}} \\
+  &= \Var_{\text{mc}}\bp{\frac{1}{R} \sum_{r=1}^R
+  \mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}} \\
+  &= \frac{1}{R^2} \sum_{r=1}^R 
+  \Var_{\text{mc}}\bp{\mathbf{1}\bp{T\bp{\mathbf{z}^{r}, \mathbf{Y}} \geq T\bp{\mathbf{Z}, \mathbf{Y}}}} \\
+  &\leq \frac{1}{R^2} \sum_{r=1}^R \frac{1}{4} \\
+  &= \frac{1}{4R},
+\end{align*}
+which proves the second part.
 
 \section*{Problem 3.3 (A finite-sample valid Monte Carlo approximation of $p_{\mathrm{FRT}}$)}
 
