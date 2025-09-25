@@ -1,0 +1,168 @@
+\documentclass[10pt]{article}
+\title{Solutions to Exercises of Chapter 10}
+\author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
+\date{\today}
+
+\usepackage{settings}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 10.1 (A simple identity)}
+
+Define 
+\begin{align*}
+  \tau &\equiv \E\bp{Y_i(1) - Y_i(0)}, \\
+  \tau_{\text{T}} &\equiv \E\bp{Y_i(1) - Y_i(0) \mid Z_i = 1}, \\
+  \tau_{\text{C}} &\equiv \E\bp{Y_i(1) - Y_i(0) \mid Z_i = 0},
+\end{align*}
+where the expectations are taken over the 
+joint distribution of $\bp{Y_i(1), Y_i(0), Z_i}$.
+Later in the derivation,
+we omit the subscript $i$ for simplicity.
+
+We are asked to show that
+\begin{align*}
+  \tau = P(Z = 1) \tau_{\text{T}} + P(Z = 0) \tau_{\text{C}}.
+\end{align*}
+
+By the law of total expectation,
+\begin{align*}
+  \tau 
+  &= \E\bp{Y(1) - Y(0)} \\
+  &= \E\bp{\E\bp{Y(1) - Y(0) \mid Z}} \\
+  &= P(Z = 1) \E\bp{Y(1) - Y(0) \mid Z = 1} + P(Z = 0) \E\bp{Y(1) - Y(0) \mid Z = 0} \\
+  &= P(Z = 1) \tau_{\text{T}} + P(Z = 0) \tau_{\text{C}},
+\end{align*}
+which completes the proof.
+
+\section*{Problem 10.2 (Nonparametric identification of other causal effects)}
+
+Under ignorability, 
+i.e., $Y(z) \ind Z \mid X$ for $z = 0, 1$,
+we are asked to show that
+\begin{enumerate}
+  \item the distributional causal effect
+    \begin{align*}
+      P\bp{Y(1) > y} - P\bp{Y(0) > y}
+    \end{align*}
+    is nonparametrically identifiable for all $y$.
+
+  \item the quantile causal effect
+    \begin{align*}
+      \operatorname{quantile}_q\bp{Y(1)} - \operatorname{quantile}_q\bp{Y(0)}
+    \end{align*}
+    is nonparametrically identifiable for all $q \in (0, 1)$,
+    where $\operatorname{quantile}_q(Y(z)) = \inf\{y: P(Y(z) \leq y) \geq q\}$ for $z = 0, 1$.
+\end{enumerate}
+
+First, we show that $P(Y(z) > y)$
+is nonparametrically identifiable:
+\begin{align*}
+  &\mathrel{\phantom{=}} P\bp{Y(z) > y} \\
+  &= \E\bp{P\bp{Y(z) > y \mid X}} \tag{Iterated Expectation} \\
+  &= \E\bp{P\bp{Y(z) > y \mid X, Z = z}} \tag{Ignorability} \\
+  &= \E\bp{P\bp{Y > y \mid X, Z = z}}, \tag{Consistency} \\
+\end{align*}
+which suggests that the distributional causal effect is identifiable.
+
+Next, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \operatorname{quantile}_q(Y(z)) \\
+  &= \inf\{y: P(Y(z) \leq y) \geq q\} \tag{Definition of Quantile} \\
+  &= \inf\{y: 1 - P(Y(z) > y) \geq q\} \tag{Complement Rule} \\
+  &= \inf\{y: 1 - \E\bp{P\bp{Y > y \mid X, Z = z}} \geq q\}, \tag{From the previous part}
+\end{align*}
+which suffices to show that the quantile causal effect is identifiable.
+
+\section*{Problem 10.3 (Outcome imputation estimator in the fully interacted logistic model)}
+
+Assume that a binary outcome follows a logistic model
+\begin{align*}
+  \E\bp{Y \mid Z, X} 
+  = P(Y = 1 \mid Z, X)
+  = \frac{e^{\beta_0 + \beta_z Z + \beta_x X + \beta_{xz}^\intercal XZ}}{1 + e^{\beta_0 + \beta_z Z + \beta_x X + \beta_{xz}^\intercal XZ}},
+\end{align*}
+We are asked to derive the outcome regression estimator
+for the \gls{ate}.
+
+By the identification result of the \gls{ate},
+\begin{align*}
+  \tau 
+  &= \E\bp{Y(1) - Y(0)} \\
+  &= \E\bp{\E\bp{Y \mid Z = 1, X} - \E\bp{Y \mid Z = 0, X}} \tag{Ignorability \& Consistency} \\
+  &= \E\bp{\frac{e^{\beta_0 + \beta_z + (\beta_x + \beta_{xz})^\intercal X}}{1 + e^{\beta_0 + \beta_z + (\beta_x + \beta_{xz})^\intercal X}} 
+    - \frac{e^{\beta_0 + \beta_x^\intercal X}}{1 + e^{\beta_0 + \beta_x^\intercal X}}}, \tag{From the logistic model}
+\end{align*}
+which can be estimated by the sample average
+\begin{align*}
+  \hat{\tau} 
+  = \frac{1}{n} \sum_{i=1}^n \bp{\frac{e^{\hat{\beta}_0 + \hat{\beta}_z + (\hat{\beta}_x + \hat{\beta}_{xz})^\intercal X_i}}{1 + e^{\hat{\beta}_0 + \hat{\beta}_z + (\hat{\beta}_x + \hat{\beta}_{xz})^\intercal X_i}} 
+    - \frac{e^{\hat{\beta}_0 + \hat{\beta}_x^\intercal X_i}}{1 + e^{\hat{\beta}_0 + \hat{\beta}_x^\intercal X_i}}},
+\end{align*}
+where $\hat{\beta}_0$, $\hat{\beta}_z$, $\hat{\beta}_x$, $\hat{\beta}_{xz}$ 
+are the \gls{ml} estimates.
+
+\section*{Problem 10.5 (Ignorability versus strong ignorability)}
+
+We are asked to give an example
+where ignorability holds but strong ignorability does not;
+that is,
+$Y(z) \ind Z \mid X$ for $z = 0, 1$
+but $\bc{Y(0), Y(1)} \ind Z \mid X$ does not hold.
+
+Without loss of generality,
+we omit $X$ in the following example.
+Let $U \sim \text{Bernoulli}(0.5)$,
+and $V \sim \text{Bernoulli}(0.5)$ be independent of $U$.
+Define $Z = U \oplus V$ (i.e., the XOR operation),
+and
+\begin{align*}
+  Y(0) &= U, \quad Y(1) = V.
+\end{align*}
+Then, we have 
+\begin{align*}
+  P(Z = 1) = P(U \neq V) = 0.5, \quad P(Z = 0) = P(U = V) = 0.5,
+\end{align*}
+We can verify that
+\begin{align*}
+  P(Y(0) = 1 \mid Z = 1) 
+  &= P(U = 1 \mid U \neq V) 
+  = \frac{P(U = 1, V = 0)}{P(U \neq V)}
+  = \frac{0.25}{0.5} = 0.5,
+  \intertext{and similarly,}
+  P(Y(0) = 1 \mid Z = 0)
+  &= P(U = 1 \mid U = V) 
+  = \frac{P(U = 1, V = 1)}{P(U = V)} 
+  = \frac{0.25}{0.5} = 0.5,
+\end{align*}
+which implies that $Y(0) \ind Z$.
+Analogously, we can show that $Y(1) \ind Z$:
+\begin{align*}
+  P(Y(1) = 1 \mid Z = 1) 
+  &= P(V = 1 \mid U \neq V) 
+  = \frac{P(U = 0, V = 1)}{P(U \neq V)} 
+  = \frac{0.25}{0.5} = 0.5,
+  \intertext{and}
+  P(Y(1) = 1 \mid Z = 0)
+  &= P(V = 1 \mid U = V) 
+  = \frac{P(U = 1, V = 1)}{P(U = V)} 
+  = \frac{0.25}{0.5} = 0.5.
+\end{align*}
+
+However, we have
+\begin{align*}
+  P(Y(0) = 1, Y(1) = 1 \mid Z = 1)
+  &= P(U = 1, V = 1 \mid U \neq V)
+  = 0,
+  \intertext{and}
+  P(Y(0) = 1, Y(1) = 1 \mid Z = 0)
+  &= P(U = 1, V = 1 \mid U = V)
+  = 1,
+\end{align*}
+which implies that $\bc{Y(0), Y(1)}$ is not independent of $Z$.
+Thus, we have constructed an example
+where ignorability holds but strong ignorability does not.
+
+\printglossaries
+\end{document}
