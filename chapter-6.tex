@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}
-\title{Solutions to Exercises of Chapter 3}
+\title{Solutions to Exercises of Chapter 6}
 \author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
 \date{\today}
 
@@ -7,6 +7,134 @@
 
 \begin{document}
 \maketitle
+
+\section*{Problem 6.7 (Lin's estimator for covariate adjustment)}
+
+Consider two \gls{ols} problems:
+\begin{align*}
+  \min_{\gamma_1, \beta_1} 
+  \sum_{i=1}^n Z_i \bp{Y_i - \gamma_1 - \beta_1^\intercal X_i}^2
+  \quad \text{and} \quad
+  \min_{\gamma_0, \beta_0} 
+  \sum_{i=1}^n (1 - Z_i) \bp{Y_i - \gamma_0 - \beta_0^\intercal X_i}^2.
+\end{align*}
+The solutions are $\hat{\gamma}_1, \hat{\beta}_1$ and $\hat{\gamma}_0, \hat{\beta}_0$.
+Define the estimator
+\begin{align}
+  \hat{\tau}(\hat{\beta}_1, \hat{\beta}_0) 
+  &= \frac{1}{n_1} \sum_{i=1}^n Z_i \bp{Y_i - \hat{\beta}_1^\intercal X_i}
+  - \frac{1}{n_0} \sum_{i=1}^n (1 - Z_i) \bp{Y_i - \hat{\beta}_0^\intercal X_i} \notag \\
+  &= \hat{\gamma}_1 - \hat{\gamma}_0.
+  \tag{6.4}
+  \label{eq:6.4}
+\end{align}
+
+We are asked to show the Proposition 6.2:
+\begin{quote}
+  The estimator $\hat{\tau}(\hat{\beta}_1, \hat{\beta}_0)$ 
+  in \cref{eq:6.4} equals the coefficient of $Z_i$ in the \gls{ols}
+  fit of $Y_i$ on $\bp{1, Z_i, X_i, Z_i \times X_i}$,
+  which is Lin's estimator, $\hat{\tau}_{\text{L}}$.
+\end{quote}
+
+Let's write the \gls{ols} problem of regressing $Y_i$ on $\bp{1, Z_i, X_i, Z_i \times X_i}$:
+\begin{align*}
+  \min_{\alpha_0, \alpha_1, \alpha_2, \alpha_3}
+  \sum_{i=1}^n \bp{Y_i - \alpha_0 - \alpha_1 Z_i - 
+    \alpha_2^\intercal X_i - \alpha_3^\intercal (Z_i X_i)}^2.
+\end{align*}
+It is equivalent to the following problem:
+\begin{align*}
+  \min_{\alpha_0, \alpha_1, \alpha_2, \alpha_3}
+  \sum_{i=1}^n Z_i \bp{Y_i - (\alpha_0 + \alpha_1) - (\alpha_2 + \alpha_3)^\intercal X_i}^2
+  + \sum_{i=1}^n (1 - Z_i) \bp{Y_i - \alpha_0 - \alpha_2^\intercal X_i}^2.
+\end{align*}
+Let $\gamma_1 = \alpha_0 + \alpha_1$, $\beta_1 = \alpha_2 + \alpha_3$, $\gamma_0 = \alpha_0$, and $\beta_0 = \alpha_2$.
+Then the above problem becomes
+\begin{align*}
+  \min_{\gamma_1, \beta_1, \gamma_0, \beta_0}
+  \sum_{i=1}^n Z_i \bp{Y_i - \gamma_1 - \beta_1^\intercal X_i}^2
+  + \sum_{i=1}^n (1 - Z_i) \bp{Y_i - \gamma_0 - \beta_0^\intercal X_i}^2.
+\end{align*}
+This is exactly a reparametrization of the two separate \gls{ols} problems we started with.
+Therefore, the solutions are related by
+\begin{align*}
+  \hat{\gamma}_1 &= \hat{\alpha}_0 + \hat{\alpha}_1, \\
+  \hat{\beta}_1 &= \hat{\alpha}_2 + \hat{\alpha}_3, \\
+  \hat{\gamma}_0 &= \hat{\alpha}_0, \\
+  \hat{\beta}_0 &= \hat{\alpha}_2,
+\end{align*}
+and we have
+\begin{align*}
+  \hat{\tau}(\hat{\beta}_1, \hat{\beta}_0)
+  = \hat{\gamma}_1 - \hat{\gamma}_0 
+  = (\hat{\alpha}_0 + \hat{\alpha}_1) - \hat{\alpha}_0 
+  = \hat{\alpha}_1 
+  = \hat{\tau}_{\text{L}}.
+\end{align*}
+
+\section*{Problem 6.8 (Predictive and projective estimators)}
+
+We can predict $Y_i(z)$ based on $X_i$ using the data 
+from the treatment group ($Z_i =1$) and control group ($Z_i = 0$) separately,
+\begin{align*}
+  \hat{\mu}_1(X_i) &= \hat{\gamma}_1 + \hat{\beta}_1^\intercal X_i, \\
+  \hat{\mu}_0(X_i) &= \hat{\gamma}_0 + \hat{\beta}_0^\intercal X_i,
+\end{align*}
+where $(\hat{\gamma}_1, \hat{\beta}_1)$ and $(\hat{\gamma}_0, \hat{\beta}_0)$
+are the solutions to the two \gls{ols} problems in Problem 6.7.
+
+If we use the predictions to impute the missing potential outcomes,
+then we can estimate the \gls{ate} by
+\begin{align*}
+  \hat{\tau}_{\text{pred}}
+  &= \frac{1}{n} 
+  \bc{\sum_{Z_i = 1} Y_i + \sum_{Z_i = 0} \hat{\mu}_1(X_i)
+  - \sum_{Z_i = 1} \hat{\mu}_0(X_i) - \sum_{Z_i = 0} Y_i}, \tag{6.7}
+  \label{eq:6.7}
+\end{align*}
+which is called the \emph{predictive estimator}.
+
+Instead of predicting the missing potential outcomes,
+if we predict all potential outcomes even if they are observed,
+then we have the \emph{projective estimator}:
+\begin{align*}
+  \hat{\tau}_{\text{proj}}
+  &= \frac{1}{n} \sum_{i=1}^n \bc{\hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)}. \tag{6.9}
+\end{align*}
+
+We are asked to show that 
+$\hat{\tau}_{\text{pred}}$ equals Lin's estimator $\hat{\tau}_{\text{L}}$.
+Furthermore, $\hat{\tau}_{\text{proj}}$ also agrees with $\hat{\tau}_{\text{L}}$.
+
+We first show $\hat{\tau}_{\text{proj}} = \hat{\tau}_{\text{L}}$.
+By substituting the definitions of $\hat{\mu}_1(X_i)$ and $\hat{\mu}_0(X_i)$,
+\begin{align*}
+  \hat{\tau}_{\text{proj}}
+  &= \frac{1}{n} \sum_{i=1}^n \bc{(\hat{\gamma}_1 - \hat{\gamma}_0) + (\hat{\beta}_1 - \hat{\beta}_0)^\intercal X_i} \\
+  &= (\hat{\gamma}_1 - \hat{\gamma}_0) + (\hat{\beta}_1 - \hat{\beta}_0)^\intercal \bar{X} \\
+  &= \hat{\tau}_{\text{L}} + (\hat{\beta}_1 - \hat{\beta}_0)^\intercal \bar{X} \\
+  &= \hat{\tau}_{\text{L}},
+\end{align*}
+where the last equality holds because of the centering of $X_i$ (i.e., $\bar{X} = 0$).
+
+By normal equations of the two \gls{ols} problems,
+we have
+\begin{align*}
+  \sum_{Z_i = z} Y_i 
+  &= \sum_{Z_i = z} \bp{\hat{\gamma}_z + \hat{\beta}_z^\intercal X_i}
+  = \sum_{Z_i = z} \hat{\mu}_z(X_i).
+\end{align*}
+Plug in the above equation into \cref{eq:6.7}, we have
+\begin{align*}
+  \hat{\tau}_{\text{pred}}
+  &= \frac{1}{n} 
+  \bc{\sum_{Z_i = 1} \hat{\mu}_1(X_i) + \sum_{Z_i = 0} \hat{\mu}_1(X_i)
+  - \sum_{Z_i = 1} \hat{\mu}_0(X_i) - \sum_{Z_i = 0} \hat{\mu}_0(X_i)} \\
+  &= \frac{1}{n} \sum_{i=1}^n \bc{\hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)} \\
+  &= \hat{\tau}_{\text{proj}} \\
+  &= \hat{\tau}_{\text{L}}.
+\end{align*}
 
 \section*{Problem 6.12 (More on the difference-in-difference estimator in the CRE)}
 
