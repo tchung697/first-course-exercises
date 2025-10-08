@@ -86,7 +86,110 @@ which completes the proof.
 
 \section*{Problem 5.4 (Compare the CRE and SRE)}
 
+We are asked to compare the sampling variance of the difference-in-means estimator
+under the \gls{cre} and the \gls{sre}.
+
+Suppose that we have a dataset from a \gls{sre} with $K$ strata.
+Assume that $e_{[k]} = n_{[k]1}/n_{[k]}$ is constant across strata.
+
+We are asked to show that
+when $n_{[k]}$ is large enough for all $k = 1, \ldots, K$,
+the difference between $\Var_{\text{CRE}}\bp{\hat{\tau}}$ 
+and $\Var_{\text{SRE}}\bp{\hat{\tau}_\text{S}}$
+is always non-negative:
+\begin{align*}
+  &\mathrel{\phantom{=}} \Var_{\text{CRE}}\bp{\hat{\tau}} - \Var_{\text{SRE}}\bp{\hat{\tau}_\text{S}} \\
+  &= \sum_{k=1}^K \bs{
+    \frac{\pi_{[k]}}{n_1} \bp{\bar{Y}_{[k]}(1) - \bar{Y}(1)}^2 
+    + \frac{\pi_{[k]}}{n_0} \bp{\bar{Y}_{[k]}(0) - \bar{Y}(0)}^2
+    - \frac{\pi_{[k]}}{n} \bp{\tau_{[k]} - \tau}^2
+  } \geq 0.
+\end{align*}
+
+For the simplicity of notation,
+let $a_{[k]} \equiv \bar{Y}_{[k]}(1) - \bar{Y}(1)$
+and
+$b_{[k]} \equiv \bar{Y}_{[k]}(0) - \bar{Y}(0)$.
+Then, $a_{[k]} - b_{[k]} = \tau_{[k]} - \tau$.
+Therefore, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \Var_{\text{CRE}}\bp{\hat{\tau}} - \Var_{\text{SRE}}\bp{\hat{\tau}_\text{S}} \\
+  &= \sum_{k=1}^K \bs{
+    \frac{\pi_{[k]}}{n_1} a_{[k]}^2 
+    + \frac{\pi_{[k]}}{n_0} b_{[k]}^2
+    - \frac{\pi_{[k]}}{n} (a_{[k]} - b_{[k]})^2
+  } \tag{Substitution} \\
+  &= \sum_{k=1}^K \pi_{[k]} \bs{
+    \frac{1}{n_1} a_{[k]}^2 
+    + \frac{1}{n_0} b_{[k]}^2
+    - \frac{1}{n} (a_{[k]}^2 - 2 a_{[k]} b_{[k]} + b_{[k]}^2)
+  } \tag{Expand the square} \\
+  &= \sum_{k=1}^K \pi_{[k]} \bs{
+    \bp{\frac{1}{n_1} - \frac{1}{n}} a_{[k]}^2 
+    + \bp{\frac{1}{n_0} - \frac{1}{n}} b_{[k]}^2
+    + \frac{2}{n} a_{[k]} b_{[k]}
+  } \tag{Rearrangement} \\
+  &= \sum_{k=1}^K \pi_{[k]} \bp{
+    \frac{n_0}{n n_1} a_{[k]}^2 
+    + \frac{n_1}{n n_0} b_{[k]}^2
+    + \frac{2}{n} a_{[k]} b_{[k]}
+  } \tag{Simplification} \\
+  &= \sum_{k=1}^K \frac{\pi_{[k]}}{n} \bp{
+    \frac{n_0}{n_1} a_{[k]}^2 
+    + \frac{n_1}{n_0} b_{[k]}^2
+    + 2 a_{[k]} b_{[k]}
+  } \tag{Factor out $1/n$} \\
+  &= \sum_{k=1}^K \frac{\pi_{[k]}}{n} \bp{
+    \sqrt{\frac{n_0}{n_1}} a_{[k]}
+    + \sqrt{\frac{n_1}{n_0}} b_{[k]}
+  }^2 \tag{Rewrite the first two terms} \\
+  &\geq 0. \tag{Square is non-negative}
+\end{align*}
+This completes the proof.
+
 \section*{Problem 5.5 (From the CRE to the SRE)}
+
+In a \gls{cre} with $n$ units,
+among which $n_1$ are assigned to treatment ($Z_i = 1$)
+and $n_0$ to control ($Z_i = 0$).
+Suppose that we have a categorical covariate $X_i \in \bc{1, \ldots, K}$,
+where $K$ is the number of strata.
+Now, the quantities $n_{[k]1}$ and $n_{[k]0}$ will be random variables
+because the number of units in stratum $k$ assigned to treatment $z$
+will vary across randomizations.
+Let $\mathbf{Z} \equiv (Z_1, \ldots, Z_n)$ be the treatment assignment vector,
+and $\mathbf{n} \equiv \{n_{[k]1}, n_{[k]0}\}_{k=1}^K$ be the collection of 
+the numbers of units in each stratum assigned to treatment and control.
+
+We are asked to show that
+\begin{align*}
+  P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z} \mid \mathbf{n}}
+  = \frac{1}{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}}.
+\end{align*}
+That is, conditional on $\mathbf{n}$,
+the treatment assignment $\mathbf{Z}$ is equivalent to that from a \gls{sre}.
+
+Note that
+for any realization of $\mathbf{n}$,
+the number of possible treatment assignments $\mathbf{z}$
+that satisfy $\mathbf{n}$ is exactly
+\begin{align*}
+  \prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}},
+\end{align*}
+and each of these treatment assignments
+has the same probability $1/\binom{n}{n_1}$
+under the \gls{cre}.
+Therefore, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z} \mid \mathbf{n}} \\
+  &= \frac{P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z}, \mathbf{n}}}{P_{\text{CRE}}\bp{\mathbf{n}}} \tag{Definition of conditional probability} \\
+  &= \frac{P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z}}}{P_{\text{CRE}}\bp{\mathbf{n}}} \tag{$\mathbf{n}$ is determined by $\mathbf{Z}$} \\
+  &= \frac{\frac{1}{\binom{n}{n_1}}}{\frac{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}}{\binom{n}{n_1}}} 
+    \tag{$P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z}} = 1/\binom{n}{n_1}$ and $P_{\text{CRE}}\bp{\mathbf{n}} = {\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}}/{\binom{n}{n_1}}$} \\
+  &= \frac{1}{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}},
+\end{align*}
+which completes the proof.
+
 
 \section*{Problem 5.6 (More FRTs for Section 5.2.2)}
 
