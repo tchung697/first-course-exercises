@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\title{Solutions to Exercises of Chapter 12}
+\author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
+\date{\today}
+
+\usepackage{settings}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 12.1 (A sanity check)}
+
+\section*{Problem 12.2 (An alternative form of the doubly robust estimator for $\tau$)}
+
+Motivated by
+\begin{align*}
+  \mu_1 &= \E\bc{\frac{Z\bc{Y - \mu_1(X, \beta_1)}}{e(X)}} + \E\bc{\mu_1(X, \beta_1)},
+\end{align*}
+we have an alternative form of the doubly robust estimator for
+$\mu_1 = \E\bc{Y(1)}$ as
+\begin{align*}
+  \tilde{\mu}_1^{\text{dr2}}
+  = \frac{\E\bc{\frac{Z\bc{Y - \mu_1(X, \beta_1)}}{e(X, \alpha)}}}{\E\bc{\frac{Z}{e(X, \alpha)}}} + \E\bc{\mu_1(X, \beta_1)}.
+\end{align*}
+We are asked to show that
+\begin{align*}
+  \tilde{\mu}_1^{\text{dr2}} = \mu_1
+\end{align*}
+if either $e(X, \alpha) = e(X)$ or $\mu_1(X, \beta_1) = \mu_1(X)$.
+
+Let 
+\begin{align*}
+  L = \E\bc{\frac{Z}{e(X, \alpha)}}.
+\end{align*}
+Note that
+\begin{align*}
+  &\mathrel{\phantom{=}} L\tilde{\mu}_1^{\text{dr2}} - L\mu_1 \\
+  &= \E\bc{\frac{Z\bc{Y - \mu_1(X, \beta_1)}}{e(X, \alpha)}} + L\E\bc{\mu_1(X, \beta_1)} - L\mu_1 \tag{Definition} \\
+  &= \E\bc{\frac{Z\bc{Y - \mu_1(X, \beta_1)}}{e(X, \alpha)} - L\bc{Y(1) - \mu_1(X, \beta_1)}} \tag{$\mu_1 = \E\bs{Y(1)}$} \\
+  &= \E\bc{\frac{Z\bc{Y(1) - \mu_1(X, \beta_1)}}{e(X, \alpha)} - L\bc{Y(1) - \mu_1(X, \beta_1)}} \tag{Consistency} \\
+  &= \E\bc{\frac{Z - Le(X, \alpha)}{e(X, \alpha)}\bc{Y(1) - \mu_1(X, \beta_1)}} \tag{Combine terms} \\
+  &= \E\bc{\E\bc{\frac{Z - Le(X, \alpha)}{e(X, \alpha)}\bc{Y(1) - \mu_1(X, \beta_1)} \;\middle|\; X}} \tag{Iterated expectation} \\
+  &= \E\bc{\frac{\E\bc{Z - Le(X, \alpha) \mid X}}{e(X, \alpha)}\E\bc{Y(1) - \mu_1(X, \beta_1) \mid X}} \tag{Ignorability} \\
+  &= \E\bc{\bc{\frac{e(X)}{e(X, \alpha)} - \frac{L e(X, \alpha)}{e(X, \alpha)}} \bc{\mu_1(X) - \mu_1(X, \beta_1)}}. \tag{Linearity of expectation} \\
+  &= \E\bc{\bc{\frac{e(X)}{e(X, \alpha)} - L} \bc{\mu_1(X) - \mu_1(X, \beta_1)}}. \tag{Simplification}
+\end{align*}
+Therefore,
+if $e(X, \alpha) = e(X)$,
+then
+\begin{align*}
+  L = \E\bc{\frac{Z}{e(X, \alpha)}} 
+  = \E\bc{\frac{Z}{e(X)}}
+  = 1,
+\end{align*}
+and thus the last line becomes
+\begin{align*}
+  \E\bc{\bc{1 - 1} \bc{\mu_1(X) - \mu_1(X, \beta_1)}} = 0.
+\end{align*}
+On the other hand,
+if $\mu_1(X, \beta_1) = \mu_1(X)$,
+then the last line becomes
+\begin{align*}
+  \E\bc{\bc{\frac{e(X)}{e(X, \alpha)} - L} \bc{0}} = 0.
+\end{align*}
+In both cases,
+we have shown that
+$L\tilde{\mu}_1^{\text{dr2}} - L\mu_1 = 0$,
+which implies that
+$\tilde{\mu}_1^{\text{dr2}} = \mu_1$.
+Similarly,
+we can define
+\begin{align*}
+  \tilde{\mu}_0^{\text{dr2}}
+  = \frac{\E\bc{\frac{(1 - Z)\bc{Y - \mu_0(X, \beta_0)}}{1 - e(X, \alpha)}}}{\E\bc{\frac{1 - Z}{1 - e(X, \alpha)}}} + \E\bc{\mu_0(X, \beta_0)}
+\end{align*}
+and show that
+\begin{align*}
+  \tilde{\mu}_0^{\text{dr2}} = \mu_0
+\end{align*}
+if either $e(X, \alpha) = e(X)$ or $\mu_0(X, \beta_0) = \mu_0(X)$.
+
+The sample version of
+$\tilde{\mu}_1^{\text{dr2}}$ and 
+$\tilde{\mu}_0^{\text{dr2}}$ give us
+an alternative form of the doubly robust estimator for $\tau$ as
+\begin{align*}
+  &\mathrel{\phantom{=}}\hat{\tau}^{\text{dr2}} \\
+  &= \frac{\frac{1}{n} \sum_{i=1}^n \frac{Z_i\bc{Y_i - \mu_1(X_i, \hat{\beta}_1)}}{e(X_i, \hat{\alpha})}}{\frac{1}{n} \sum_{i=1}^n \frac{Z_i}{e(X_i, \hat{\alpha})}} + \frac{1}{n} \sum_{i=1}^n \mu_1(X_i, \hat{\beta}_1)
+  - \frac{\frac{1}{n} \sum_{i=1}^n \frac{(1 - Z_i)\bc{Y_i - \mu_0(X_i, \hat{\beta}_0)}}{1 - e(X_i, \hat{\alpha})}}{\frac{1}{n} \sum_{i=1}^n \frac{1 - Z_i}{1 - e(X_i, \hat{\alpha})}} - \frac{1}{n} \sum_{i=1}^n \mu_0(X_i, \hat{\beta}_0).
+\end{align*}
+
+
+\printglossaries
+\end{document}
