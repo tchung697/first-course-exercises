@@ -1,0 +1,226 @@
+\documentclass[10pt]{article}
+\title{Solutions to Exercises of Chapter 11}
+\author{Ting-Chih Hung \\ \href{mailto:nuit0815@gmail.com}{\texttt{nuit0815@gmail.com}}}
+\date{\today}
+
+\usepackage{settings}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 11.1 (Another version of Theorem 11.1)}
+
+We are asked to show that
+\begin{align}
+  Z \ind \bc{Y(1), Y(0), X} \mid e(X, Y(1), Y(0)) \label{eq:11.4} \tag{11.4}
+\end{align}
+
+To simplify the notation,
+we denote $V = \bc{Y(1), Y(0), X}$ and $e(V) = P(Z = 1 \mid V)$.
+Our goal is to show that
+\begin{align*}
+  P(Z = 1 \mid V, e(V)) = P(Z = 1 \mid e(V)).
+\end{align*}
+Note that once we know $V$,
+we also know $e(V)$ automatically.
+Thus, the left-hand side can be simplified as
+\begin{align*}
+  P(Z = 1 \mid V, e(V)) 
+  &= P(Z = 1 \mid V) \tag{Knowing $e(V)$ does not add information} \\
+  &= e(V). \tag{Definition of propensity score}
+\end{align*}
+As for the right-hand side,
+\begin{align*}
+  P(Z = 1 \mid e(V))
+  &= \E\bc{P(Z = 1 \mid V, e(V)) \mid e(V)} \tag{Iterated expectation} \\
+  &= \E\bc{P(Z = 1 \mid V) \mid e(V)} \tag{Knowing $e(V)$ does not add information} \\
+  &= \E\bc{e(V) \mid e(V)} \tag{Definition of propensity score} \\
+  &= e(V). \tag{Taking out the constant}
+\end{align*}
+Since both sides are equal to $e(V)$,
+we have shown \eqref{eq:11.4}.
+
+\section*{Problem 11.2 (Another version of Theorem 11.1)}
+
+We are asked to show that
+\begin{align*}
+  Z \ind Y(z) \mid X \implies Z \ind Y(z) \mid e(X)
+\end{align*}
+for $z \in \{0, 1\}$.
+
+It suffices to show that
+\begin{align*}
+  P(Z = 1 \mid Y(z), e(X)) = P(Z = 1 \mid e(X)).
+\end{align*}
+For the left-hand side,
+\begin{align*}
+  &\mathrel{\phantom{=}} P(Z = 1 \mid Y(z), e(X)) \\
+  &= \E\bc{P(Z = 1 \mid Y(z), X, e(X)) \mid Y(z), e(X)} \tag{Iterated expectation} \\
+  &= \E\bc{P(Z = 1 \mid Y(z), X) \mid Y(z), e(X)} \tag{Knowing $e(X)$ does not add information} \\
+  &= \E\bc{P(Z = 1 \mid X) \mid Y(z), e(X)} \tag{Ignorability} \\
+  &= \E\bc{e(X) \mid Y(z), e(X)} \tag{Definition of propensity score} \\
+  &= e(X). \tag{Taking out the constant}
+\end{align*}
+As for the right-hand side,
+\begin{align*}
+  &\mathrel{\phantom{=}} P(Z = 1 \mid e(X)) \\
+  &= \E\bc{P(Z = 1 \mid X, e(X)) \mid e(X)} \tag{Iterated expectation} \\
+  &= \E\bc{P(Z = 1 \mid X) \mid e(X)} \tag{Knowing $e(X)$ does not add information} \\
+  &= \E\bc{e(X) \mid e(X)} \tag{Definition of propensity score} \\
+  &= e(X). \tag{Taking out the constant}
+\end{align*}
+Since both sides are equal to $e(X)$,
+we have completed the proof.
+
+\section*{Problem 11.3 (More results on the IPW estimators)}
+
+Consider the \gls{ht} estimator
+\begin{align*}
+  \hat{\tau}^{\text{ht}}
+  = \frac{1}{n} \sum_{i=1}^n \frac{Z_i Y_i}{\hat{e}(X_i)} 
+  - \frac{1}{n} \sum_{i=1}^n \frac{(1 - Z_i) Y_i}{1 - \hat{e}(X_i)}.
+\end{align*}
+First, we are asked to show that
+if we change $Y_i$ to $Y_i + c$ for some constant $c$,
+then $\hat{\tau}^{\text{ht}}$ 
+becomes $\hat{\tau}^{\text{ht}} + c(\hat{1}_{\text{T}} - \hat{1}_{\text{C}})$,
+where
+\begin{align*}
+  \hat{1}_{\text{T}} = \frac{1}{n} \sum_{i=1}^n \frac{Z_i}{\hat{e}(X_i)}, \quad
+  \hat{1}_{\text{C}} = \frac{1}{n} \sum_{i=1}^n \frac{1 - Z_i}{1 - \hat{e}(X_i)}.
+\end{align*}
+By substituting $Y_i$ with $Y_i + c$, we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \frac{1}{n} \sum_{i=1}^n \frac{Z_i (Y_i + c)}{\hat{e}(X_i)} 
+    - \frac{1}{n} \sum_{i=1}^n \frac{(1 - Z_i) (Y_i + c)}{1 - \hat{e}(X_i)} \\
+  &= \frac{1}{n} \sum_{i=1}^n \frac{Z_i Y_i}{\hat{e}(X_i)} 
+    + \frac{c}{n} \sum_{i=1}^n \frac{Z_i}{\hat{e}(X_i)}
+    - \frac{1}{n} \sum_{i=1}^n \frac{(1 - Z_i) Y_i}{1 - \hat{e}(X_i)}
+    - \frac{c}{n} \sum_{i=1}^n \frac{1 - Z_i}{1 - \hat{e}(X_i)} \\
+  &= \hat{\tau}^{\text{ht}} + c(\hat{1}_{\text{T}} - \hat{1}_{\text{C}}).
+\end{align*}
+This completes the first part.
+
+Next, we are asked to show that
+\begin{align*}
+  \E\bc{\frac{1}{n} \sum_{i=1}^n \frac{Z_i}{e(X_i)}} = 1, \quad 
+  \E\bc{\frac{1}{n} \sum_{i=1}^n \frac{1 - Z_i}{1 - e(X_i)}} = 1.
+\end{align*}
+This can be shown by the direct calculation:
+\begin{align*}
+  \E\bc{\frac{1}{n} \sum_{i=1}^n \frac{Z_i}{e(X_i)}}
+  &= \frac{1}{n} \sum_{i=1}^n \E\bs{\frac{Z_i}{e(X_i)}} \tag{Linearity of expectation} \\
+  &= \frac{1}{n} \sum_{i=1}^n \E\bc{\E\bs{\frac{Z_i}{e(X_i)} \;\middle|\; X_i}} \tag{Iterated expectation} \\
+  &= \frac{1}{n} \sum_{i=1}^n \E\bs{\frac{\E[Z_i \mid X_i]}{e(X_i)}} \tag{Taking out the constant} \\
+  &= \frac{1}{n} \sum_{i=1}^n \E\bs{\frac{e(X_i)}{e(X_i)}} \tag{Definition of propensity score} \\
+  &= \frac{1}{n} \sum_{i=1}^n 1 \tag{Simplification} \\
+  &= 1.
+\end{align*}
+The second equality can be shown similarly.
+
+\section*{Problem 11.5 (Balancing score and propensity score: more theoretical results)}
+
+Let $b(X)$ be a balancing score,
+i.e., $Z \ind X \mid b(X)$.
+We are asked to show that
+$b(X)$ is a balancing score
+if and only if
+$e(X)$ is a function of $b(X)$.
+
+We first show the ``if'' part.
+Assume that $e(X)$ is a function of $b(X)$;
+i.e., there exists some function $f$ such that
+$e(X) = f(b(X))$.
+We want to show that
+\begin{align*}
+  P(Z = 1 \mid X, b(X)) = P(Z = 1 \mid b(X)).
+\end{align*}
+The left-hand side can be simplified as
+\begin{align*}
+  P(Z = 1 \mid X, b(X))
+  &= P(Z = 1 \mid X) \tag{Knowing $b(X)$ does not add information} \\
+  &= e(X). \tag{Definition of propensity score}
+\end{align*}
+The right-hand side can be simplified as
+\begin{align*}
+  &\mathrel{\phantom{=}} P(Z = 1 \mid b(X)) \\
+  &= \E\bc{P(Z = 1 \mid X, b(X)) \mid b(X)} \tag{Iterated expectation} \\
+  &= \E\bc{P(Z = 1 \mid X) \mid b(X)} \tag{Knowing $b(X)$ does not add information} \\
+  &= \E\bc{e(X) \mid b(X)} \tag{Definition of propensity score} \\
+  &= \E\bc{f(b(X)) \mid b(X)} \tag{Assumption} \\
+  &= f(b(X)) \tag{Taking out the constant} \\
+  &= e(X). \tag{Assumption}
+\end{align*}
+Thus, we have shown the ``if'' part.
+
+Next, we show the ``only if'' part.
+Assume that $b(X)$ is a balancing score;
+i.e., $Z \ind X \mid b(X)$.
+We want to show that
+\begin{align*}
+  e(X) = P(Z = 1 \mid X)
+  \text{ is a function of } b(X).
+\end{align*}
+By the definition of balancing score,
+\begin{align*}
+  &\mathrel{\phantom{=}} P(Z = 1 \mid X) \\
+  &= P(Z = 1 \mid X, b(X)) \tag{Knowing $b(X)$ does not add information} \\
+  &= P(Z = 1 \mid b(X)). \tag{Definition of balancing score}
+\end{align*}
+Thus, we have shown the ``only if'' part.
+
+\section*{Problem 11.6 (Some basics of subgroup effects)}
+
+Consider a standard observational study with covariates 
+$X = (X_1, X_2)$, 
+where $X_1$ denotes a binary subgroup indicator
+and $X_2$ contains the rest of the covariates. 
+The parameter of interest is the subgroup causal effect
+\begin{align*}
+  \tau(x_1) = \E\bp{Y(1) - Y(0) \mid X_1 = x_1}
+\end{align*}
+
+First, we are asked to show that
+\begin{align*}
+  \tau(x_1) 
+  &= \E\bc{\frac{\mathbf{1}\{X_1 = x_1\} ZY}{e(X)} - \frac{\mathbf{1}\{X_1 = x_1\} (1 - Z)Y}{1 - e(X)}} 
+  \;\bigg/\; P(X_1 = x_1)
+\end{align*}
+under the ignorability assumption.
+To save space,
+we only show the first term.
+Since
+\begin{align*}
+  \E\bs{Y(1) \mid X}
+  = \E\bs{\frac{ZY}{e(X)} \;\middle|\; X},
+\end{align*}
+we have
+\begin{align*}
+  &\mathrel{\phantom{=}} \E\bs{Y(1) \mid X_1 = x_1} \\
+  &= \E\bc{\E\bs{Y(1) \mid X} \mid X_1 = x_1} \tag{Iterated expectation} \\
+  &= \E\bc{\E\bs{\frac{ZY}{e(X)} \;\middle|\; X} \;\middle|\; X_1 = x_1} \tag{From the previous equation} \\
+  &= \E\bc{\frac{ZY}{e(X)} \;\middle|\; X_1 = x_1} \tag{Iterated expectation} \\
+  &= \E\bc{\frac{\mathbf{1}\{X_1 = x_1\} ZY}{e(X)}} \;\bigg/\; P(X_1 = x_1). \tag{Definition of conditional expectation}
+\end{align*}
+The second term can be shown similarly.
+Therefore, we have completed the first part.
+
+To give the \gls{ht} estimator for $\tau(x_1)$,
+we can replace the expectations and probabilities
+by their sample analogues:
+\begin{align*}
+  &\mathrel{\phantom{=}}\hat{\tau}^{\text{ht}}(x_1) \\
+  &= \frac{1}{n} \sum_{i=1}^n \bp{\frac{\mathbf{1}\{X_{1i} = x_1\} Z_i Y_i}{\hat{e}(X_i)}
+  - \frac{\mathbf{1}\{X_{1i} = x_1\} (1 - Z_i) Y_i}{1 - \hat{e}(X_i)}}
+  \;\bigg/\; \frac{1}{n} \sum_{i = 1}^n \mathbf{1}\{X_{1i} = x_1\} .
+\end{align*}
+To give the H\'ajek estimator for $\tau(x_1)$,
+we can normalize the weights in the \gls{ht} estimator:
+\begin{align*}
+  &\mathrel{\phantom{=}}\hat{\tau}^{\text{hajek}}(x_1) \\
+  &= \sum_{i=1}^n \frac{\mathbf{1}\{X_{1i} = x_1\} Z_i Y_i / \hat{e}(X_i)}{\sum_{i=1}^n \mathbf{1}\{X_{1i} = x_1\} Z_i / \hat{e}(X_i)}
+  - \sum_{i=1}^n \frac{\mathbf{1}\{X_{1i} = x_1\} (1 - Z_i) Y_i / (1 - \hat{e}(X_i))}{\sum_{i=1}^n \mathbf{1}\{X_{1i} = x_1\} (1 - Z_i) / (1 - \hat{e}(X_i))}.
+\end{align*}
+
+\printglossaries
+\end{document}

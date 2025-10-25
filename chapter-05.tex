@@ -181,11 +181,15 @@ has the same probability $1/\binom{n}{n_1}$
 under the \gls{cre}.
 Therefore, we have
 \begin{align*}
+  P_{\text{CRE}}\bp{\mathbf{n}}
+  = \frac{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}}{\binom{n}{n_1}}.
+\end{align*}
+Now, we can calculate $P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z} \mid \mathbf{n}}$ as follows:
+\begin{align*}
   &\mathrel{\phantom{=}} P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z} \mid \mathbf{n}} \\
   &= \frac{P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z}, \mathbf{n}}}{P_{\text{CRE}}\bp{\mathbf{n}}} \tag{Definition of conditional probability} \\
   &= \frac{P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z}}}{P_{\text{CRE}}\bp{\mathbf{n}}} \tag{$\mathbf{n}$ is determined by $\mathbf{Z}$} \\
-  &= \frac{\frac{1}{\binom{n}{n_1}}}{\frac{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}}{\binom{n}{n_1}}} 
-    \tag{$P_{\text{CRE}}\bp{\mathbf{Z} = \mathbf{z}} = 1/\binom{n}{n_1}$ and $P_{\text{CRE}}\bp{\mathbf{n}} = {\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}}/{\binom{n}{n_1}}$} \\
+  &= \frac{1 \;\big/ \; \binom{n}{n_1}}{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}} \; \middle/ \; \binom{n}{n_1} \right.} \tag{Substitution} \\
   &= \frac{1}{\prod_{k=1}^K \binom{n_{[k]}}{n_{[k]1}}},
 \end{align*}
 which completes the proof.
