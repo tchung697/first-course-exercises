@@ -7,9 +7,9 @@ which is available on arXiv (https://arxiv.org/abs/2305.18793).
 
 ## To-do List
 
-- [] Chapter 3 Exercises
-- [] Chapter 4 Exercises
-- [] Chapter 5 Exercises
-- [] Chapter 6 Exercises
+- [ ] Chapter 3 Exercises
+- [ ] Chapter 4 Exercises
+- [ ] Chapter 5 Exercises
+- [ ] Chapter 6 Exercises
 - [x] Chapter 10 Exercises
 - [x] Chapter 11 Exercises
