@@ -136,6 +136,49 @@ Plug in the above equation into \cref{eq:6.7}, we have
   &= \hat{\tau}_{\text{L}}.
 \end{align*}
 
+\section*{Problem 6.11 (Regression adjustment / post-stratification of CRE)}
+
+Suppose that we have discrete covariates $C_i \in \{1, 2, \ldots, K\}$.
+We create $K - 1$ centered dummy variables
+\begin{align*}
+  X_{i} = \bc{\mathbf{1}\{C_i = 1\} - \pi_{[1]}, \ldots, \mathbf{1}\{C_i = K - 1\} - \pi_{[K - 1]}},
+\end{align*}
+where $\pi_{[k]} = P(C_i = k)$ for $k = 1, \ldots, K$.
+We are asked to show that Lin's estimator $\hat{\tau}_{\text{L}}$
+based on $X_i$ equals the post-stratified estimator $\hat{\tau}_{\text{PS}}$:
+\begin{align*}
+  \hat{\tau}_{\text{PS}}
+  &= \sum_{k=1}^K \hat{\pi}_{[k]} \hat{\tau}_{[k]}.
+\end{align*}
+
+Define $\beta_z = (\beta_{z, 1}, \ldots, \beta_{z, K - 1})^\intercal$ for $z \in \{0, 1\}$.
+Let the predicted potential outcomes be
+\begin{align*}
+  \hat{\mu}_1(X_i) &= \hat{\gamma}_1 + \hat{\beta}_1^\intercal X_i, \\
+  \hat{\mu}_0(X_i) &= \hat{\gamma}_0 + \hat{\beta}_0^\intercal X_i,
+\end{align*}
+where $(\hat{\gamma}_1, \hat{\beta}_1)$ and $(\hat{\gamma}_0, \hat{\beta}_0)$
+are the regression coefficients from the regression of $Y_i$ on $(1, X_i)$
+in the treatment group and control group, respectively.
+Note that both regressions are saturated models within each stratum,
+so the predicted potential outcomes equal the stratum means:
+\begin{align*}
+  \hat{\mu}_1(X_i) 
+  &= \hat{\bar{Y}}_{[k]}(1) \quad \text{if } C_i = k, \\
+  \hat{\mu}_0(X_i)
+  &= \hat{\bar{Y}}_{[k]}(0) \quad \text{if } C_i = k.
+\end{align*}
+Thus,
+\begin{align*}
+  \hat{\tau}_{\text{L}}
+  &= \frac{1}{n} \sum_{i=1}^n \bc{\hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)} \\
+  &= \frac{1}{n} \sum_{k=1}^K \sum_{C_i = k} 
+  \bc{\hat{\bar{Y}}_{[k]}(1) - \hat{\bar{Y}}_{[k]}(0)} \\
+  &= \sum_{k=1}^K \frac{n_{[k]}}{n} \hat{\tau}_{[k]} \\
+  &= \sum_{k=1}^K \hat{\pi}_{[k]} \hat{\tau}_{[k]} \\
+  &= \hat{\tau}_{\text{PS}}.
+\end{align*}
+
 \section*{Problem 6.12 (More on the difference-in-difference estimator in the CRE)}
 
 \printglossaries
